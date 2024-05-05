@@ -66,6 +66,19 @@
       color: #555; /* Slightly darker gray color */
       padding: 10px;
     }
+
+    #additional-properties {
+      left: 350px;
+      top: 40px;
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid #ddd; /* Light gray border */
+      padding: 10px;
+      display: none;
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+      font-size: 12px;
+    }
   </style>
 </head>
 
@@ -74,6 +87,7 @@
     <!-- Elements and spaces will be placed here -->
   </div>
   <div id="hovered-element-display"></div>
+  <div id="additional-properties"></div>
   <script>
     const PTABLE_CONFIGURATION = [
       [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true,],
@@ -119,6 +133,10 @@
       hoveredElementSymbol.id = 'hovered-element-symbol';
       hoveredElementSymbol.style.display = 'none'; // Initially hide the symbol
       bigSquare.appendChild(hoveredElementSymbol);
+
+      // Create a div to display additional properties of the hovered element
+      const additionalProperties = document.getElementById('additional-properties');
+      ptableCanvas.appendChild(additionalProperties);
 
       let lastHoveredElement; // Variable to store the last hovered element
       let elementPositions = {}; // Object to store positions of elements
@@ -215,6 +233,13 @@
             ${elementData.atomic_mass}<br>
             ${elementData.number}
         `;
+          // Show additional properties
+          additionalProperties.style.display = 'block';
+          additionalProperties.innerHTML = `
+            ${elementData.phase}<br>
+            ${elementData.category}<br>
+            ${elementData.electron_configuration_semantic}<br>
+          `;
         }
         // Store the last hovered element
         lastHoveredElement = element_name;
@@ -228,6 +253,7 @@
         hoveredElement.style.display = 'none'; // Hide the big symbol
         hoveredElementSymbol.textContent = ''; // Clear the symbol text
         hoveredElementSymbol.style.display = 'none'; // Hide the symbol
+        additionalProperties.style.display = 'none'; // Hide additional properties
         if (lastHoveredElement) {
           // Display the last hovered element in bigSquare
           displayHoveredElement(lastHoveredElement);
