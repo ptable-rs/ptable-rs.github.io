@@ -44,8 +44,10 @@
 
     .symbol {
       margin-left: 10px;
-      font-size: 36px; /* Slightly smaller font size */
+      font-size: 74px; /* Slightly smaller font size */
+      font-weight: 1900;
       color: #333; /* Dark gray color */
+      transition: color 0.3s ease; /* Add transition for color */
     }
 
     #hovered-element-display {
@@ -199,7 +201,8 @@
           bigSquare.style.display = 'block'; // Show the big square
           hoveredElementSymbol.textContent = elementData.symbol; // Set the symbol text
           hoveredElementSymbol.style.display = 'block'; // Show the symbol
-
+          // Set symbol color darker than category color
+          hoveredElementSymbol.style.color = darkenColor(getColorByCategory(elementData.category));
           // Include atomic mass and number
           hoveredElement.innerHTML = `
             <strong>${element_name.toUpperCase()}</strong><br>
@@ -225,6 +228,16 @@
         } else {
           bigSquare.style.display = 'none'; // Hide the big square if no element is hovered
         }
+      }
+
+      // Function to darken a color
+      function darkenColor(color) {
+        // Convert HEX to RGB
+        let rgb = color.substring(1).match(/.{1,2}/g).map(val => parseInt(val, 16));
+        // Darken RGB values
+        rgb = rgb.map(val => Math.floor(val * 0.7)); // Adjust the factor as needed
+        // Convert back to HEX
+        return '#' + rgb.map(val => ('0' + val.toString(16)).slice(-2)).join('');
       }
     }
   </script>
