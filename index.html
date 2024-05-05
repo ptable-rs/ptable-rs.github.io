@@ -22,12 +22,18 @@
     .big-square {
       position: absolute;
       font-weight: bold;
-      width: 120px;
-      height: 120px;
+      width: 160px;
+      height: 160px;
       background-color: rgba(0, 0, 0, 0.5);
       border: 2px solid black;
       z-index: 1;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+
+      transition: all 0.3s ease-in-out;
     }
+
 
     #hovered-element-display {
       position: absolute;
@@ -35,18 +41,16 @@
       border: 1px solid #000;
       padding: 5px;
       display: none;
+
+      transition: all 0.3s ease-in-out;
     }
 
-    #big-symbol {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      /* Adjust the font size as needed */
-      color: white;
-      /* Adjust the color as needed */
+    #hovered-element {
+      font-size: 14px;
+      color: rgb(0, 0, 0);
+      padding: 10px; /* Add padding to prevent text from sticking to the edge */
     }
+
   </style>
 </head>
 
@@ -90,9 +94,9 @@
       bigSquare.style.display = 'none'; // Initially hide the big square
       ptableCanvas.appendChild(bigSquare);
 
-      const bigSymbol = document.createElement('div');
-      bigSymbol.id = 'big-symbol';
-      bigSquare.appendChild(bigSymbol);
+      const hoveredElement = document.createElement('div');
+      hoveredElement.id = 'hovered-element';
+      bigSquare.appendChild(hoveredElement);
 
       let elementPositions = {}; // Object to store positions of elements
       let element_counter = 0;
@@ -133,7 +137,7 @@
             // Check if the empty space is between Hydrogen and Helium
             if ((colIndex === 0 && rowIndex === 0) || (colIndex === 1 && rowIndex === 0)) {
               bigSquare.style.left = leftOffset * 2 + 'px';
-              bigSquare.style.top = topOffset * 2 + 'px';
+              bigSquare.style.top = topOffset * 1 + 'px';
             }
           }
         });
@@ -160,19 +164,17 @@
       }
 
       // Define functions to display and hide the hovered element
-      function displayHoveredElement(symbol) {
-        hoveredElementDisplay.textContent = symbol;
+      function displayHoveredElement(element_name) {
+        hoveredElementDisplay.textContent = element_name;
         hoveredElementDisplay.style.display = 'block';
-        const bigSymbol = document.getElementById('big-symbol');
-        bigSymbol.textContent = symbol.toUpperCase(); // Set the symbol text
-        const elementData = ptable_db[symbol]; // Retrieve data of the hovered element
+        const hoveredElement = document.getElementById('hovered-element');
+        hoveredElement.textContent = element_name.toUpperCase(); // Set the symbol text
+        const elementData = ptable_db[element_name]; // Retrieve data of the hovered element
         if (elementData) {
-          const elementPosition = elementPositions[symbol];
+          const elementPosition = elementPositions[element_name];
           hoveredElementDisplay.style.left = elementPosition.left + 'px';
           hoveredElementDisplay.style.top = (elementPosition.top - 20) + 'px'; // Adjust position for better visibility
-          bigSymbol.style.display = 'block'; // Show the big symbol
-          bigSymbol.style.left = '50%'; // Center the symbol horizontally
-          bigSymbol.style.top = '50%'; // Center the symbol vertically
+          hoveredElement.style.display = 'block'; // Show the big symbol
           bigSquare.style.backgroundColor = getColorByCategory(elementData.category); // Set background color based on category
           bigSquare.style.display = 'block'; // Show the big square
         }
@@ -181,9 +183,9 @@
 
       function hideHoveredElement() {
         hoveredElementDisplay.style.display = 'none';
-        const bigSymbol = document.getElementById('big-symbol');
-        bigSymbol.textContent = ''; // Clear the symbol text
-        bigSymbol.style.display = 'none'; // Hide the big symbol
+        const hoveredElement = document.getElementById('hovered-element');
+        hoveredElement.textContent = ''; // Clear the symbol text
+        hoveredElement.style.display = 'none'; // Hide the big symbol
         bigSquare.style.display = 'none'; // Hide the big square
       }
     }
