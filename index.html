@@ -18,6 +18,7 @@
       text-align: center;
       width: 50px;
       height: 50px;
+      cursor: pointer; /* Add cursor pointer for clickable elements */
     }
 
     .empty-space {
@@ -44,7 +45,7 @@
 
     .symbol {
       margin-left: 10px;
-      font-size: 74px; /* Slightly smaller font size */
+      font-size: 74px;
       font-weight: 1900;
       color: #333; /* Dark gray color */
       transition: color 0.3s ease; /* Add transition for color */
@@ -146,6 +147,8 @@
             // Add event listeners for mouseover and mouseout
             elementBox.addEventListener('mouseover', () => displayHoveredElement(elem_name));
             elementBox.addEventListener('mouseout', () => hideHoveredElement());
+            // Add click event listener to open URL
+            elementBox.addEventListener('click', () => openURL(elem_name));
           } else {
             // Create an empty space
             const emptySpace = document.createElement('div');
@@ -203,6 +206,9 @@
           hoveredElementSymbol.style.display = 'block'; // Show the symbol
           // Set symbol color darker than category color
           hoveredElementSymbol.style.color = darkenColor(getColorByCategory(elementData.category));
+          // Set color for other properties
+          hoveredElement.style.color = darkenColor(getColorByCategory(elementData.category)); // Name color
+          hoveredElementDisplay.style.color = darkenColor(getColorByCategory(elementData.category)); // Other properties color
           // Include atomic mass and number
           hoveredElement.innerHTML = `
             <strong>${element_name.toUpperCase()}</strong><br>
@@ -235,9 +241,17 @@
         // Convert HEX to RGB
         let rgb = color.substring(1).match(/.{1,2}/g).map(val => parseInt(val, 16));
         // Darken RGB values
-        rgb = rgb.map(val => Math.floor(val * 0.7)); // Adjust the factor as needed
+        rgb = rgb.map(val => Math.floor(val * 0.5)); // Adjust the factor as needed
         // Convert back to HEX
         return '#' + rgb.map(val => ('0' + val.toString(16)).slice(-2)).join('');
+      }
+
+      // Function to open URL of the element
+      function openURL(element_name) {
+        const url = ptable_db[element_name]?.source;
+        if (url) {
+          window.open(url, '_blank');
+        }
       }
     }
   </script>
