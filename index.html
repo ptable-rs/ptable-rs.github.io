@@ -30,11 +30,13 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      align-items: flex-start; /* Align content to the left */
+      align-items: flex-start;
+      /* Align content to the left */
     }
 
     .symbol {
-      margin-left: 10px; /* Add some space between the bigSquare and the symbol */
+      margin-left: 10px;
+      /* Add some space between the bigSquare and the symbol */
     }
 
     #hovered-element-display {
@@ -48,15 +50,19 @@
     #hovered-element {
       font-size: 14px;
       color: rgb(0, 0, 0);
-      padding: 10px; /* Add padding to prevent text from sticking to the edge */
+      padding: 10px;
+      /* Add padding to prevent text from sticking to the edge */
     }
-    
+
     #atom-model-container {
       position: absolute;
       top: 0;
-      left: 350px; /* Adjust this value to position the model relative to the big square */
-      width: 150px; /* Adjust the size of the container */
-      height: 150px; /* Adjust the size of the container */
+      left: 350px;
+      /* Adjust this value to position the model relative to the big square */
+      width: 150px;
+      /* Adjust the size of the container */
+      height: 150px;
+      /* Adjust the size of the container */
     }
   </style>
 </head>
@@ -212,6 +218,7 @@
       }
 
       function renderAtomModel(modelUrl) {
+        console.log('Model URL:', modelUrl); // Log the model URL to ensure it's correct
         const container = document.getElementById('atom-model-container');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -220,20 +227,30 @@
         container.appendChild(renderer.domElement);
 
         const loader = new THREE.GLTFLoader();
-        loader.load(modelUrl, function(gltf) {
-          const model = gltf.scene;
-          scene.add(model);
-        });
+        loader.load(
+          modelUrl,
+          function (gltf) {
+            const model = gltf.scene;
+            scene.add(model);
+          },
+          function (xhr) {
+            console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+          },
+          function (error) {
+            console.error('Error loading 3D model:', error);
+          }
+        );
 
         camera.position.z = 5;
 
-        const animate = function() {
+        const animate = function () {
           requestAnimationFrame(animate);
           renderer.render(scene, camera);
         };
 
         animate();
       }
+
     }
   </script>
 </body>
