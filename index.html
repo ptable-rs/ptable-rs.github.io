@@ -2,10 +2,17 @@
 <html lang="en">
 
 <head>
-  <title>Pablo 11C237</title>
+  <title>Periodic Table</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5; /* Soft light gray background */
+      margin: 0;
+      padding: 0;
+    }
+
     .element-box {
       position: absolute;
       text-align: center;
@@ -24,45 +31,37 @@
       font-weight: bold;
       width: 160px;
       height: 160px;
-      background-color: rgba(0, 0, 0, 0.5);
-      border: 2px solid black;
+      background-color: rgba(255, 255, 255, 0.9); /* Soft white background */
+      border: 2px solid #ddd; /* Light gray border */
       z-index: 1;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-      /* Align content to the left */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+      transition: background-color 0.3s ease; /* Add transition for background color */
     }
 
     .symbol {
       margin-left: 10px;
-      /* Add some space between the bigSquare and the symbol */
+      font-size: 36px; /* Slightly smaller font size */
+      color: #333; /* Dark gray color */
     }
 
     #hovered-element-display {
       position: absolute;
       background-color: rgba(255, 255, 255, 0.8);
-      border: 1px solid #000;
+      border: 1px solid #ddd; /* Light gray border */
       padding: 5px;
       display: none;
+      border-radius: 5px; /* Rounded corners */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
     }
 
     #hovered-element {
       font-size: 14px;
-      color: rgb(0, 0, 0);
+      color: #555; /* Slightly darker gray color */
       padding: 10px;
-      /* Add padding to prevent text from sticking to the edge */
-    }
-
-    #atom-model-container {
-      position: absolute;
-      top: 0;
-      left: 350px;
-      /* Adjust this value to position the model relative to the big square */
-      width: 150px;
-      /* Adjust the size of the container */
-      height: 150px;
-      /* Adjust the size of the container */
     }
   </style>
 </head>
@@ -72,8 +71,6 @@
     <!-- Elements and spaces will be placed here -->
   </div>
   <div id="hovered-element-display"></div>
-  <div id="atom-model-container"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
     const PTABLE_CONFIGURATION = [
       [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true,],
@@ -120,6 +117,7 @@
       hoveredElementSymbol.style.display = 'none'; // Initially hide the symbol
       bigSquare.appendChild(hoveredElementSymbol);
 
+      let lastHoveredElement; // Variable to store the last hovered element
       let elementPositions = {}; // Object to store positions of elements
       let element_counter = 0;
       PTABLE_CONFIGURATION.forEach((row, rowIndex) => {
@@ -199,58 +197,35 @@
           hoveredElement.style.display = 'block'; // Show the big symbol
           bigSquare.style.backgroundColor = getColorByCategory(elementData.category); // Set background color based on category
           bigSquare.style.display = 'block'; // Show the big square
-          hoveredElementSymbol.textContent = ptable_db[element_name].symbol; // Set the symbol text
+          hoveredElementSymbol.textContent = elementData.symbol; // Set the symbol text
           hoveredElementSymbol.style.display = 'block'; // Show the symbol
-          renderAtomModel(ptable_db[element_name].bohr_model_3d);
+
+          // Include atomic mass and number
+          hoveredElement.innerHTML = `
+            <strong>${element_name.toUpperCase()}</strong><br>
+            ${elementData.atomic_mass}<br>
+            ${elementData.number}
+        `;
         }
+        // Store the last hovered element
+        lastHoveredElement = element_name;
       }
+
 
       function hideHoveredElement() {
         hoveredElementDisplay.style.display = 'none';
         const hoveredElement = document.getElementById('hovered-element');
         hoveredElement.textContent = ''; // Clear the symbol text
         hoveredElement.style.display = 'none'; // Hide the big symbol
-        bigSquare.style.display = 'none'; // Hide the big square
         hoveredElementSymbol.textContent = ''; // Clear the symbol text
         hoveredElementSymbol.style.display = 'none'; // Hide the symbol
-        // Clear the atom model when hiding the hovered element
-        document.getElementById('atom-model-container').innerHTML = '';
+        if (lastHoveredElement) {
+          // Display the last hovered element in bigSquare
+          displayHoveredElement(lastHoveredElement);
+        } else {
+          bigSquare.style.display = 'none'; // Hide the big square if no element is hovered
+        }
       }
-
-      function renderAtomModel(modelUrl) {
-        console.log('Model URL:', modelUrl); // Log the model URL to ensure it's correct
-        const container = document.getElementById('atom-model-container');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        container.appendChild(renderer.domElement);
-
-        const loader = new THREE.GLTFLoader();
-        loader.load(
-          modelUrl,
-          function (gltf) {
-            const model = gltf.scene;
-            scene.add(model);
-          },
-          function (xhr) {
-            console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-          },
-          function (error) {
-            console.error('Error loading 3D model:', error);
-          }
-        );
-
-        camera.position.z = 5;
-
-        const animate = function () {
-          requestAnimationFrame(animate);
-          renderer.render(scene, camera);
-        };
-
-        animate();
-      }
-
     }
   </script>
 </body>
