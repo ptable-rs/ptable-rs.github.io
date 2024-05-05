@@ -28,12 +28,14 @@
       border: 2px solid black;
       z-index: 1;
       display: flex;
+      flex-direction: column;
       justify-content: flex-start;
-      align-items: flex-end;
-
-      transition: all 0.3s ease-in-out;
+      align-items: flex-start; /* Align content to the left */
     }
 
+    .symbol {
+      margin-left: 10px; /* Add some space between the bigSquare and the symbol */
+    }
 
     #hovered-element-display {
       position: absolute;
@@ -41,8 +43,6 @@
       border: 1px solid #000;
       padding: 5px;
       display: none;
-
-      transition: all 0.3s ease-in-out;
     }
 
     #hovered-element {
@@ -50,7 +50,14 @@
       color: rgb(0, 0, 0);
       padding: 10px; /* Add padding to prevent text from sticking to the edge */
     }
-
+    
+    #atom-model-container {
+      position: absolute;
+      top: 0;
+      left: 350px; /* Adjust this value to position the model relative to the big square */
+      width: 150px; /* Adjust the size of the container */
+      height: 150px; /* Adjust the size of the container */
+    }
   </style>
 </head>
 
@@ -59,6 +66,8 @@
     <!-- Elements and spaces will be placed here -->
   </div>
   <div id="hovered-element-display"></div>
+  <div id="atom-model-container"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
     const PTABLE_CONFIGURATION = [
       [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true,],
@@ -98,17 +107,24 @@
       hoveredElement.id = 'hovered-element';
       bigSquare.appendChild(hoveredElement);
 
+      // Create a div to display the symbol of the hovered element
+      const hoveredElementSymbol = document.createElement('div');
+      hoveredElementSymbol.classList.add('symbol');
+      hoveredElementSymbol.id = 'hovered-element-symbol';
+      hoveredElementSymbol.style.display = 'none'; // Initially hide the symbol
+      bigSquare.appendChild(hoveredElementSymbol);
+
       let elementPositions = {}; // Object to store positions of elements
       let element_counter = 0;
       PTABLE_CONFIGURATION.forEach((row, rowIndex) => {
         row.forEach((isTrue, colIndex) => {
           if (isTrue) {
-            const symbol = ptable_db.order[element_counter++]; // Calculate symbol based on index
-            const category = ptable_db[symbol].category; // Get category information
+            const elem_name = ptable_db.order[element_counter++]; // Calculate symbol based on index
+            const category = ptable_db[elem_name].category; // Get category information
             const elementBox = document.createElement('div');
             elementBox.classList.add('element-box');
             const element = document.createElement('p');
-            element.textContent = ptable_db[symbol].symbol; // Use symbol instead of direct name
+            element.textContent = ptable_db[elem_name].symbol; // Use symbol instead of direct name
             elementBox.appendChild(element);
             const leftOffset = colIndex * 60 + 20; // Adjust left offset based on column index
             const topOffset = rowIndex * 60 + 20; // Adjust top offset based on row index
@@ -117,12 +133,12 @@
             elementBox.style.backgroundColor = getColorByCategory(category); // Set background color based on category
             ptableCanvas.appendChild(elementBox);
             // Store the position of the element
-            elementPositions[symbol] = {
+            elementPositions[elem_name] = {
               left: leftOffset,
               top: topOffset
             };
             // Add event listeners for mouseover and mouseout
-            elementBox.addEventListener('mouseover', () => displayHoveredElement(symbol));
+            elementBox.addEventListener('mouseover', () => displayHoveredElement(elem_name));
             elementBox.addEventListener('mouseout', () => hideHoveredElement());
           } else {
             // Create an empty space
@@ -130,7 +146,7 @@
             emptySpace.classList.add('empty-space');
             const leftOffset = colIndex * 60 + 20; // Adjust left offset based on column index
             const topOffset = rowIndex * 60 + 20; // Adjust top offset based on row index
-            emptySpace.style.left = leftOffset / + 'px';
+            emptySpace.style.left = leftOffset + 'px';
             emptySpace.style.top = topOffset + 'px';
             ptableCanvas.appendChild(emptySpace);
 
@@ -177,9 +193,11 @@
           hoveredElement.style.display = 'block'; // Show the big symbol
           bigSquare.style.backgroundColor = getColorByCategory(elementData.category); // Set background color based on category
           bigSquare.style.display = 'block'; // Show the big square
+          hoveredElementSymbol.textContent = ptable_db[element_name].symbol; // Set the symbol text
+          hoveredElementSymbol.style.display = 'block'; // Show the symbol
+          renderAtomModel(ptable_db[element_name].bohr_model_3d);
         }
       }
-
 
       function hideHoveredElement() {
         hoveredElementDisplay.style.display = 'none';
@@ -187,6 +205,34 @@
         hoveredElement.textContent = ''; // Clear the symbol text
         hoveredElement.style.display = 'none'; // Hide the big symbol
         bigSquare.style.display = 'none'; // Hide the big square
+        hoveredElementSymbol.textContent = ''; // Clear the symbol text
+        hoveredElementSymbol.style.display = 'none'; // Hide the symbol
+        // Clear the atom model when hiding the hovered element
+        document.getElementById('atom-model-container').innerHTML = '';
+      }
+
+      function renderAtomModel(modelUrl) {
+        const container = document.getElementById('atom-model-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        const loader = new THREE.GLTFLoader();
+        loader.load(modelUrl, function(gltf) {
+          const model = gltf.scene;
+          scene.add(model);
+        });
+
+        camera.position.z = 5;
+
+        const animate = function() {
+          requestAnimationFrame(animate);
+          renderer.render(scene, camera);
+        };
+
+        animate();
       }
     }
   </script>
