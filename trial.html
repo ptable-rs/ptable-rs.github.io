@@ -81,7 +81,7 @@
     }
 
     #additional-properties {
-      left: 500px;
+      left: 350px;
       top: 40px;
       position: absolute;
       background-color: rgba(255, 255, 255, 0.8);
@@ -97,15 +97,15 @@
     }
 
     #hovered-element-atom-model {
-      left: 331px;
-      top: 20px;
-      width: 160px;
+      left: 590px;
+      top: 40px;
+      width: 100px;
       /* Adjust width as needed */
-      height: 160px;
+      height: 100px;
       /* Adjust height as needed */
       position: absolute;
       background-color: rgba(255, 255, 255, 0.8);
-      /* border: 10px solid rgba(180, 174, 174, 0.8); */
+      border: 10px solid rgba(255, 255, 255, 0.8);
       /* Light gray border */
       /* padding: 0px; */
       display: none;
@@ -134,16 +134,16 @@
 
   <script>
     const PTABLE_CONFIGURATION = [
-      [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true,],
-      [true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true,],
-      [true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true,],
       [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
       [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false,],
-      [false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false,],
-      [false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false,],
+      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
     ];
 
     const DATA_URL = 'https://raw.githubusercontent.com/orhnk/pablo/master/db/periodic-table-lookup.json';
@@ -238,16 +238,16 @@
       function getColorByCategory(category) {
         // Define color mappings for categories
         const colorMap = {
-          'alkali metal': '#ff9999',
-          'alkaline earth metal': '#ffcc66',
-          'transition metal': '#99ccff',
-          'post-transition metal': '#ffcc99',
-          'metalloid': '#cc99ff',
-          'polyatomic nonmetal': '#66cc99',
-          'diatomic nonmetal': '#66cccc',
-          'noble gas': '#cc99cc',
-          'actinide': '#cc9999',
-          'lanthanide': '#99cc99'
+          'alkali metal': '#cccccc',
+          'alkaline earth metal': '#cccccc',
+          'transition metal': '#cccccc',
+          'post-transition metal': '#cccccc',
+          'metalloid': '#cccccc',
+          'polyatomic nonmetal': '#cccccc',
+          'diatomic nonmetal': '#cccccc',
+          'noble gas': '#cccccc',
+          'actinide': '#cccccc',
+          'lanthanide': '#cccccc'
           // Add more categories and colors as needed
         };
         // Return the color for the given category, default to a fallback color if not found
