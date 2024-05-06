@@ -20,6 +20,7 @@
       width: 50px;
       height: 50px;
       cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       /* Add cursor pointer for clickable elements */
     }
 
@@ -96,7 +97,7 @@
     }
 
     #hovered-element-atom-model {
-      left: 500px;
+      left: 590px;
       top: 40px;
       width: 100px;
       /* Adjust width as needed */
@@ -287,9 +288,11 @@
           // Show additional properties
           additionalProperties.style.display = 'block';
           additionalProperties.innerHTML = `
-            ${elementData.phase}<br>
-            ${elementData.category}<br>
-            ${elementData.electron_configuration_semantic}<br>
+            <table>
+              <tr><td>Category:</td><td>&nbsp${elementData.category}</td></tr>
+              <tr><td>Phase:</td><td>&nbsp${elementData.phase}</td></tr>
+              <tr><td>Configuration:</td><td>&nbsp${elementData.electron_configuration_semantic}</td></tr>
+            </table>
           `;
           // Show atom model
           atomModel.style.display = 'block';
