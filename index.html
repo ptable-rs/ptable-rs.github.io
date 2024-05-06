@@ -309,6 +309,7 @@
 
             // Create a renderer
             const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setClearColor(0xffffff); // White background
             renderer.setSize(atomModelContainer.clientWidth, atomModelContainer.clientHeight);
             atomModelContainer.appendChild(renderer.domElement);
 
@@ -320,10 +321,14 @@
                 const model = gltf.scene;
                 scene.add(model);
 
+                // :WEBGL MODEL CONFIGURATION:
                 // Position and scale the model
                 // model.position.set(0, 0, 0); // Center the model
                 model.scale.set(20, 20, 20); // Adjust the scale as needed
                 scene.add(model);
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows for smoother edges
+
 
                 // Animate the model (optional)
                 function animateModel() {
