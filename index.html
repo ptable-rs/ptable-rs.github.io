@@ -115,13 +115,14 @@
       font-size: 12px;
     }
   </style>
-
-  <!-- import libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-
 </head>
 
 <body>
+
+  <!-- import libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+
   <div id="ptable-canvas" style="position: relative; width: 100%;">
     <!-- Elements and spaces will be placed here -->
   </div>
@@ -304,7 +305,7 @@
 
             // Create a camera
             const camera = new THREE.PerspectiveCamera(75, atomModelContainer.clientWidth / atomModelContainer.clientHeight, 0.1, 1000);
-            camera.position.z = 10;
+            camera.position.z = 5;
 
             // Create a renderer
             const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -320,17 +321,25 @@
                 scene.add(model);
 
                 // Position and scale the model
-                model.position.set(0, 0, 0); // Center the model
-                model.scale.set(10, 10, 10); // Adjust the scale as needed
+                // model.position.set(0, 0, 0); // Center the model
+                model.scale.set(20, 20, 20); // Adjust the scale as needed
+                scene.add(model);
 
                 // Animate the model (optional)
-                const animate = function () {
-                  requestAnimationFrame(animate);
-                  model.rotation.y += 0.01;
+                function animateModel() {
                   model.rotation.x += 0.01;
+                  model.rotation.y += 0.01;
                   model.rotation.z += 0.01; // Rotate around Z-axis
                   renderer.render(scene, camera);
                 };
+
+                // Render loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    animateModel();
+                    renderer.render(scene, camera);
+                }
+
                 animate();
               },
               undefined,
@@ -338,6 +347,13 @@
                 console.error('Error loading model:', error);
               }
             );
+
+            // Add lighting
+            var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            scene.add(directionalLight);
 
           }
         }
