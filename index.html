@@ -115,6 +115,106 @@
       /* Soft shadow */
       font-size: 12px;
     }
+
+    /* Credits */
+    /* Fade in animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Fade out animation */
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    /* Slide in from top animation */
+    @keyframes slideIn {
+      from {
+        top: -100px;
+        opacity: 0;
+      }
+
+      to {
+        top: 0;
+        opacity: 1;
+      }
+    }
+
+    /* Slide out to top animation */
+    @keyframes slideOut {
+      from {
+        top: 0;
+        opacity: 1;
+      }
+
+      to {
+        top: -100px;
+        opacity: 0;
+      }
+    }
+
+    .credits-popup {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.5s ease;
+      /* Apply fade in animation */
+    }
+
+    .credits-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      animation: slideIn 0.5s ease;
+      /* Apply slide in animation */
+    }
+
+    .close-button {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    #credits-button {
+      font-family: Arial, sans-serif;
+      position: absolute;
+      left: 45px;
+      top: 440px;
+      width: 60px;
+      height: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -131,6 +231,35 @@
   <div id="hovered-element-display"></div>
   <div id="additional-properties"></div>
   <div id="hovered-element-atom-model"></div>
+
+  <button id="credits-button">Delil</button>
+
+  <div id="credits-popup" class="credits-popup">
+    <div class="credits-content">
+      <span class="close-button" onclick="closeCreditsPopup()">&times;</span>
+      <h2>Credits</h2>
+      <table>
+        <tr>
+        <tr>
+          <td>Konu: </td>
+          <td>&nbsp Periyodik Cetvel Tasarlanması</td>
+        </tr>
+        <tr>
+          <td>Sınıf&No: </td>
+          <td>&nbsp 11C 237</td>
+        </tr>
+        <tr>
+          <td>Tasarlayan: </td>
+          <td>&nbsp Orhan KARAMAN</td>
+        </tr>
+        <tr>
+          <td>Hoca: </td>
+          <td>&nbsp Fatma Kurt ORUÇ</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
 
   <script>
     const PTABLE_CONFIGURATION = [
@@ -411,6 +540,36 @@
         }
       }
     }
+
+    // Function to open the credits pop-up with animation
+    function openCreditsPopup() {
+      const creditsPopup = document.getElementById('credits-popup');
+      creditsPopup.style.display = 'block';
+      creditsPopup.classList.add('fadeIn'); // Apply fade in animation
+      const creditsContent = document.querySelector('.credits-content');
+      creditsContent.classList.add('slideIn'); // Apply slide in animation
+    }
+
+    // Function to close the credits pop-up with animation
+    function closeCreditsPopup() {
+      const creditsPopup = document.getElementById('credits-popup');
+      creditsPopup.classList.remove('fadeIn'); // Remove fade in animation
+      creditsPopup.classList.add('fadeOut'); // Apply fade out animation
+      const creditsContent = document.querySelector('.credits-content');
+      creditsContent.classList.remove('slideIn'); // Remove slide in animation
+      creditsContent.classList.add('slideOut'); // Apply slide out animation
+      setTimeout(() => {
+        creditsPopup.style.display = 'none';
+        creditsPopup.classList.remove('fadeOut'); // Remove fade out animation after it's done
+      }, 500); // Wait for the animation duration (500ms) before hiding the pop-up
+    }
+
+    // Add event listener to the credits button
+    document.getElementById('credits-button').addEventListener('click', openCreditsPopup);
+
+    // Add event listener to the close button in the pop-up
+    document.querySelector('.close-button').addEventListener('click', closeCreditsPopup);
+
   </script>
 </body>
 
