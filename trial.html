@@ -20,7 +20,7 @@
       width: 50px;
       height: 50px;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
       /* Add cursor pointer for clickable elements */
     }
 
@@ -120,6 +120,7 @@
 
 <body>
 
+
   <!-- import libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
@@ -134,16 +135,16 @@
 
   <script>
     const PTABLE_CONFIGURATION = [
+      [true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true,],
+      [true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true,],
+      [true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true,],
       [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
       [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
-      [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+      [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false,],
+      [false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false,],
+      [false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false,],
     ];
 
     const DATA_URL = 'https://raw.githubusercontent.com/orhnk/pablo/master/db/periodic-table-lookup.json';
@@ -238,16 +239,16 @@
       function getColorByCategory(category) {
         // Define color mappings for categories
         const colorMap = {
-          'alkali metal': '#cccccc',
-          'alkaline earth metal': '#cccccc',
-          'transition metal': '#cccccc',
-          'post-transition metal': '#cccccc',
-          'metalloid': '#cccccc',
-          'polyatomic nonmetal': '#cccccc',
-          'diatomic nonmetal': '#cccccc',
-          'noble gas': '#cccccc',
-          'actinide': '#cccccc',
-          'lanthanide': '#cccccc'
+          'alkali metal': '#ff9999',
+          'alkaline earth metal': '#ffcc66',
+          'transition metal': '#99ccff',
+          'post-transition metal': '#ffcc99',
+          'metalloid': '#cc99ff',
+          'polyatomic nonmetal': '#66cc99',
+          'diatomic nonmetal': '#66cccc',
+          'noble gas': '#cc99cc',
+          'actinide': '#cc9999',
+          'lanthanide': '#99cc99'
           // Add more categories and colors as needed
         };
         // Return the color for the given category, default to a fallback color if not found
